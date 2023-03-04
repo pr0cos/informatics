@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -13,6 +14,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
     boolean s_flag;
     boolean a_flag;
     boolean d_flag;
+    boolean mouse_left_flag;
     Player player;
 
     long t;
@@ -24,6 +26,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
         boolean s_flag = false;
         boolean a_flag = false;
         boolean d_flag = false;
+        boolean mouse_left_flag = false;
         t = System.currentTimeMillis();
         setSize(1920, 1080);
         setVisible(true);
@@ -75,6 +78,21 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
         }
         if(!(left_up || right_up || left_down)){
             board.bug_update(-1, -1);
+        }
+
+        if(System.currentTimeMillis() - t > player.gun.cooldown && mouse_left_flag && (player.gun instanceof MachineGun || player.gun instanceof SniperRifle)){
+            Point e = MouseInfo.getPointerInfo().getLocation();
+            double x1 = e.getX() - (player.x + player.size / 2.0);
+            double y1 = e.getY() - (player.y + player.size / 2.0);
+            Vector2D vel = new Vector2D(x1, y1);
+            vel.normalize();
+            t = System.currentTimeMillis();
+            if(player.gun instanceof MachineGun) {
+                board.playerBullets.add(new PlayerBullet(20 * vel.x, 20 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+            }
+            if(player.gun instanceof SniperRifle){
+                board.playerBullets.add(new PlayerBullet(35 * vel.x, 35 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+            }
         }
 
         g.dispose();
@@ -141,21 +159,41 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(!(e.getButton() == MouseEvent.BUTTON1)){
-            return;
-        }
-        if(player.gun instanceof DefaultGun && System.currentTimeMillis() - t > player.gun.cooldown){
-            t = System.currentTimeMillis();
-            double x1 = e.getX() - (player.x + player.size / 2.0);
-            double y1 = e.getY() - (player.y + player.size / 2.0);
-            Vector2D vel = new Vector2D(x1, y1);
-            vel.normalize();
-            board.playerBullets.add(new PlayerBullet(10 * vel.x, 10 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+        if((e.getButton() == MouseEvent.BUTTON1)) {
+            mouse_left_flag = true;
+            if (player.gun instanceof DefaultGun) {
+                double x1 = e.getX() - (player.x + player.size / 2.0);
+                double y1 = e.getY() - (player.y + player.size / 2.0);
+                Vector2D vel = new Vector2D(x1, y1);
+                vel.normalize();
+                board.playerBullets.add(new PlayerBullet(10 * vel.x, 10 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+            }
+            if (System.currentTimeMillis() - t > player.gun.cooldown) {
+                double x1 = e.getX() - (player.x + player.size / 2.0);
+                double y1 = e.getY() - (player.y + player.size / 2.0);
+                Vector2D vel = new Vector2D(x1, y1);
+                vel.normalize();
+                t = System.currentTimeMillis();
+                if (player.gun instanceof Shotgun) {
+                    Vector2D vel1 = vel.rotated(Math.PI / 36);
+                    Vector2D vel2 = vel.rotated(-Math.PI / 36);
+                    Vector2D vel3 = vel.rotated(Math.PI / 18);
+                    Vector2D vel4 = vel.rotated(-Math.PI / 18);
+                    board.playerBullets.add(new PlayerBullet(15 * vel.x, 15 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                    board.playerBullets.add(new PlayerBullet(15 * vel1.x, 15 * vel1.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                    board.playerBullets.add(new PlayerBullet(15 * vel2.x, 15 * vel2.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                    board.playerBullets.add(new PlayerBullet(15 * vel3.x, 15 * vel3.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                    board.playerBullets.add(new PlayerBullet(15 * vel4.x, 15 * vel4.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                }
+            }
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if((e.getButton() == MouseEvent.BUTTON1)){
+            mouse_left_flag = false;
+        }
     }
 
     @Override

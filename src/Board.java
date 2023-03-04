@@ -28,8 +28,8 @@ public class Board{
         this.cellSize = cellSize;
         x_direction = 0;
         y_direction = 0;
-        dx = 5;
-        dy = 5;
+        dx = 2;
+        dy = 2;
         rooms = new ArrayList<>();
         playerBullets = new ArrayList<>();
         board = new ArrayList<>();

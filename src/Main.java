@@ -9,7 +9,7 @@ public class Main {
         manager.addKeyEventDispatcher(panel);
         while(true) {
             panel.repaint();
-            Thread.sleep(10);
+            Thread.sleep(0);
         }
     }
 }

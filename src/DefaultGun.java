@@ -2,6 +2,6 @@ import java.awt.*;
 
 public class DefaultGun extends Gun{
     public DefaultGun() {
-        super(3, Color.YELLOW, 200);
+        super(3, Color.YELLOW, 400);
     }
 }
