@@ -19,6 +19,7 @@ public class Board{
     int dy;
     ArrayList<Rectangle> rooms;
     ArrayList<PlayerBullet> playerBullets;
+    ArrayList<ArrayList<Integer>> graph;
 
     public Board(int x, int y, int cellSize) {
         this.x = x;
@@ -39,6 +40,13 @@ public class Board{
                 board.get(i).add(new Cell(j, i, false, cellSize));
             }
         }
+        graph = new ArrayList<>();
+        for(int i = 0; i < 100; i++){
+            graph.add(new ArrayList<Integer>());
+            for(int j = 0; j < 100; j++){
+                graph.get(i).add(0);
+            }
+        }
         generate();
     }
     void generate(){
@@ -54,6 +62,7 @@ public class Board{
                     }
                 }
             }
+            rooms.add(new Rectangle(1, 1, 10, 10));
             this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
         }else if(n == 2){
             for(int i = 0; i < start.length; i++){
@@ -63,6 +72,7 @@ public class Board{
                     }
                 }
             }
+            rooms.add(new Rectangle(1, 16, 10, 10));
             this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
         }else if(n == 3){
             for(int i = 0; i < start.length; i++){
@@ -72,6 +82,7 @@ public class Board{
                     }
                 }
             }
+            rooms.add(new Rectangle(1, 31, 10, 10));
             this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
         }else if(n == 4){
             for(int i = 0; i < start.length; i++){
@@ -81,6 +92,7 @@ public class Board{
                     }
                 }
             }
+            rooms.add(new Rectangle(31, 1, 10, 10));
             this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
         }else if(n == 5){
             for(int i = 0; i < start.length; i++){
@@ -90,6 +102,7 @@ public class Board{
                     }
                 }
             }
+            rooms.add(new Rectangle(31, 16, 10, 10));
             this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
         }else if(n == 6){
             for(int i = 0; i < start.length; i++){
@@ -99,6 +112,7 @@ public class Board{
                     }
                 }
             }
+            rooms.add(new Rectangle(31, 31, 10, 10));
             this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
         }
         String[] room1 = new Rooms().enemy_room();
@@ -109,6 +123,7 @@ public class Board{
                 }
             }
         }
+        rooms.add(new Rectangle(16, 1, 10, 10));
         this.paintRectangle(new Rectangle(20, 11, 2, 5), new Color(86, 15, 15));
         String[] room2 = new Rooms().enemy_room();
         for(int i = 0; i < room2.length; i++){
@@ -118,6 +133,7 @@ public class Board{
                 }
             }
         }
+        rooms.add(new Rectangle(16, 16, 10, 10));
         this.paintRectangle(new Rectangle(20, 26, 2, 5), new Color(86, 15, 15));
         String[] room3 = new Rooms().enemy_room();
         for(int i = 0; i < room3.length; i++){
@@ -127,8 +143,29 @@ public class Board{
                 }
             }
         }
+        rooms.add(new Rectangle(16, 31, 10, 10));
     }
 
+    void make_graph(Rectangle room){
+        for(int i = 0; i < room.height; i++){
+            for(int j = 0; j < room.width; j++){
+                if(board.get(i + room.y).get(room.x + j).status){
+                    if(j >= 1) {
+                        graph.get(10 * i + j).set(10 * i + j - 1, booleanObjectToInt(board.get(i + room.y).get(room.x + j - 1).status));
+                    }
+                    if(j < room.width - 1) {
+                        graph.get(10 * i + j).set(10 * i + j + 1, booleanObjectToInt(board.get(i + room.y).get(room.x + j + 1).status));
+                    }
+                    if(i >= 1) {
+                        graph.get(10 * i + j).set(10 * (i - 1) + j, booleanObjectToInt(board.get(i - 1 + room.y).get(room.x + j).status));
+                    }
+                    if(i < room.height - 1) {
+                        graph.get(10 * i + j).set(10 * (i + 1) + j, booleanObjectToInt(board.get(i + 1 + room.y).get(room.x + j).status));
+                    }
+                }
+            }
+        }
+    }
     void paint(Graphics g){
         for(int i = 0; i < height; i++){
             for(int j = 0; j < width; j++){
@@ -156,7 +193,7 @@ public class Board{
         this.y_direction = y_direction;
     }
 
-    public void update(){
+    public void update(Player player){
         this.x += x_direction * dx;
         this.y += y_direction * dy;
         ArrayList<PlayerBullet> delete_player_bullets = new ArrayList<>();
@@ -171,6 +208,8 @@ public class Board{
         for(PlayerBullet bullet : delete_player_bullets){
             playerBullets.remove(bullet);
         }
+        make_graph(get_room_screen(player.x, player.y));
+        System.out.println(graph);
     }
 
     public void bug_update(int x_d, int y_d){
@@ -186,5 +225,19 @@ public class Board{
         int x1 = x - this.x;
         int y1 = y - this.y;
         return get_cell_world(x1, y1);
+    }
+
+    public Rectangle get_room_screen(int x, int y){
+        Cell cell = get_cell_screen(x, y);
+        for(Rectangle room : rooms){
+            if(room.x <= cell.x && cell.x <= room.x + room.width){
+                return room;
+            }
+        }
+        return null;
+    }
+
+    public static int booleanObjectToInt(boolean foo) {
+        return Boolean.compare(foo, false);
     }
 }

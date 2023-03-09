@@ -50,7 +50,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
 
         board.paint(g);
         player.paint(g);
-        board.update();
+        board.update(this.player);
         boolean left_up = board.get_cell_screen(player.x, player.y).status;
         boolean left_down = board.get_cell_screen(player.x, player.y + player.size).status;
         boolean right_up = board.get_cell_screen(player.x + player.size, player.y).status;
