@@ -80,7 +80,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             board.bug_update(-1, -1);
         }
 
-        if(System.currentTimeMillis() - t > player.gun.cooldown && mouse_left_flag && (player.gun instanceof MachineGun || player.gun instanceof SniperRifle)){
+        if(System.currentTimeMillis() - t > player.gun.cooldown && mouse_left_flag && (player.gun instanceof MachineGun)){
             Point e = MouseInfo.getPointerInfo().getLocation();
             double x1 = e.getX() - (player.x + player.size / 2.0);
             double y1 = e.getY() - (player.y + player.size / 2.0);
@@ -89,9 +89,6 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             t = System.currentTimeMillis();
             if(player.gun instanceof MachineGun) {
                 board.playerBullets.add(new PlayerBullet(20 * vel.x, 20 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
-            }
-            if(player.gun instanceof SniperRifle){
-                board.playerBullets.add(new PlayerBullet(35 * vel.x, 35 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
             }
         }
 
@@ -174,6 +171,12 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
                 Vector2D vel = new Vector2D(x1, y1);
                 vel.normalize();
                 t = System.currentTimeMillis();
+                if(player.gun instanceof MachineGun) {
+                    board.playerBullets.add(new PlayerBullet(20 * vel.x, 20 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                }
+                if(player.gun instanceof SniperRifle){
+                    board.playerBullets.add(new PlayerBullet(25 * vel.x, 25 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                }
                 if (player.gun instanceof Shotgun) {
                     Vector2D vel1 = vel.rotated(Math.PI / 36);
                     Vector2D vel2 = vel.rotated(-Math.PI / 36);

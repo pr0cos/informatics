@@ -20,7 +20,7 @@ public class Player {
         this.y = y;
         hurts = false;
 //        gun = new DefaultGun();
-        gun = new Shotgun();
+        gun = new SniperRifle();
     }
     public void paint(Graphics g){
         if(System.currentTimeMillis() - t > 300){

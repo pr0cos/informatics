@@ -9,13 +9,13 @@ public class Enemy {
     int size;
     Rectangle room;
 
-    public Enemy(double x, double y, int hp, int damage, Rectangle room) {
+    public Enemy(double x, double y, int hp, int damage, Rectangle room, int size) {
         this.x = x;
         this.y = y;
         this.hp = hp;
         this.damage = damage;
         this.room = room;
-        size = 30;
+        this.size = size;
     }
 
     public void update(double dx, double dy){

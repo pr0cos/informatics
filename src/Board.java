@@ -4,9 +4,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.lang.annotation.Retention;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
-
 public class Board{
 
     int x;
@@ -70,7 +69,6 @@ public class Board{
             }
             Rectangle room = new Rectangle(1, 1, 10, 10);
             rooms.add(room);
-            enemies.add(new Enemy(5 * cellSize, 5 * cellSize, 10, 10, room));
             this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
         }else if(n == 2){
             for(int i = 0; i < start.length; i++){
@@ -136,7 +134,9 @@ public class Board{
                 }
             }
         }
-        rooms.add(new Rectangle(16, 1, 10, 10));
+        Rectangle enemy_room_1 = new Rectangle(16, 1, 10, 10);
+        rooms.add(enemy_room_1);
+        enemies.add(new Enemy(21 * cellSize, 5 * cellSize, 100, 10, enemy_room_1, 30));
         this.paintRectangle(new Rectangle(20, 11, 2, 5), new Color(86, 15, 15));
         String[] room2 = new Rooms().enemy_room();
         for(int i = 0; i < room2.length; i++){
@@ -164,11 +164,58 @@ public class Board{
         if(room == null){
             return;
         }
+        ArrayList<Rectangle>rects = new ArrayList<>();
+        for(int i = room.y; i < room.y + room.height; i++){
+            for(int j = room.x; j < room.x + room.width; j++){
+                if(!board.get(i).get(j).status){
+                    rects.add(new Rectangle(j * cellSize, i * cellSize, cellSize, cellSize));
+                }
+            }
+        }
         Cell player_cell = get_cell_screen(player.x, player.y);
-        ArrayList<ArrayList<Integer>> paths = shortestPath((player_cell.x - room.x - 1) + (player_cell.y - room.y - 1) * 10);
+        ArrayList<ArrayList<Integer>> paths = shortestPath((player_cell.x - room.x) + (player_cell.y - room.y) * 10);
+        System.out.println((player_cell.x - room.x) + (player_cell.y - room.y) * 10);
         for(Enemy enemy : enemies){
-            Cell enemy_cell = get_cell_screen((int) enemy.x, (int) enemy.y);
-            System.out.println(paths.get((enemy_cell.x - room.x - 1) + (enemy_cell.y - room.y - 1) * 10));
+            if(enemy.room == room) {
+                Cell enemy_cell = get_cell_screen((int) enemy.x, (int) enemy.y);
+                ArrayList<Integer> path = paths.get((enemy_cell.x - room.x) + (enemy_cell.y - room.y) * 10);
+                Collections.reverse(path);
+                System.out.println(path);
+                if(path.size() <= 1){
+                    Vector2D v = new Vector2D((player.x + player.size / 2.0) - (enemy.x + enemy.size / 2.0), (player.y + player.size / 2.0) - (enemy.y + enemy.size / 2.0));
+                    v.normalize();
+                    enemy.update(v.x, v.y);
+                }else {
+                    double x2_ans = (room.x + (path.get(1) % 10) + 0.5) * cellSize + this.x;
+                    double y2_ans = (room.y + (path.get(1) / 10) + 0.5) * cellSize + this.y;
+                    boolean flag = false;
+                    for(int vertex : path){
+                        double x1 = (room.x + (vertex % 10) + 0.5) * cellSize;
+                        double y1 = (room.y + (vertex / 10) + 0.5) * cellSize;
+                        Line2D project1 = new Line2D.Double(x1, y1, enemy.x - this.x, enemy.y - this.y);
+                        Line2D project2 = new Line2D.Double(x1, y1, enemy.x + enemy.size - this.x, enemy.y + enemy.size - this.y);
+                        Line2D project3 = new Line2D.Double(x1, y1, enemy.x + enemy.size - this.x, enemy.y - this.y);
+                        Line2D project4 = new Line2D.Double(x1, y1, enemy.x - this.x, enemy.y + enemy.size - this.y);
+                        for(Rectangle rect : rects){
+                            if(project1.intersects(rect) || project2.intersects(rect) || project3.intersects(rect) || project4.intersects(rect)){
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(!flag){
+                            x2_ans = x1 + this.x;
+                            y2_ans = y1 + this.y;
+                        }else{
+                            break;
+                        }
+                    }
+                    System.out.println(x2_ans - (enemy.x + enemy.size / 2.0));
+                    System.out.println(y2_ans - (enemy.y + enemy.size / 2.0));
+                    Vector2D v = new Vector2D(x2_ans - (enemy.x + enemy.size / 2.0), y2_ans - (enemy.y + enemy.size / 2.0));
+                    v.normalize();
+                    enemy.update(v.x, v.y);
+                }
+            }
         }
     }
 
@@ -287,6 +334,7 @@ public class Board{
     public void update(Player player){
         this.x += x_direction * dx;
         this.y += y_direction * dy;
+        make_graph(get_room_screen(player.x, player.y));
         ArrayList<PlayerBullet> delete_player_bullets = new ArrayList<>();
         ArrayList<Enemy> delete_enemies = new ArrayList<>();
         for(PlayerBullet bullet : playerBullets){
@@ -325,7 +373,6 @@ public class Board{
         for(Enemy enemy : delete_enemies){
             enemies.remove(enemy);
         }
-        make_graph(get_room_screen(player.x, player.y));
     }
 
     public void bug_update(int x_d, int y_d){
@@ -354,7 +401,7 @@ public class Board{
     public Rectangle get_room_screen(int x, int y){
         Cell cell = get_cell_screen(x, y);
         for(Rectangle room : rooms){
-            if(room.x <= cell.x && cell.x <= room.x + room.width){
+            if(room.x <= cell.x && cell.x < room.x + room.width && room.y <= cell.y && cell.y < room.y + room.height){
                 return room;
             }
         }
@@ -363,5 +410,13 @@ public class Board{
 
     public static int booleanObjectToInt(boolean foo) {
         return Boolean.compare(foo, false);
+    }
+
+    void invertUsingFor(Object[] array) {
+        for (int i = 0; i < array.length / 2; i++) {
+            Object temp = array[i];
+            array[i] = array[array.length - 1 - i];
+            array[array.length - 1 - i] = temp;
+        }
     }
 }
