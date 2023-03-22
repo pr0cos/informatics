@@ -56,9 +56,13 @@ public class Board{
     }
     void generate(){
         Random r = new Random();
-//        int n = r.nextInt(1, 7);
-        int n = 1;
+        int n = r.nextInt(1, 7);
+//        n = 2;
         String[] start = new Rooms().start_room();
+        String[] final_room = new Rooms().final_room();
+        String[] chest_room = new Rooms().chest_room();
+        Rectangle final_room_rect;
+        Rectangle chest_room_rect;
         if(n == 1){
             for(int i = 0; i < start.length; i++){
                 for(int j = 0; j < start[i].length(); j++){
@@ -69,7 +73,103 @@ public class Board{
             }
             Rectangle room = new Rectangle(1, 1, 10, 10);
             rooms.add(room);
+            this.x = (1920 - 45) / 2 - 300;
+            this.y = (1080 - 45) / 2 - 300;
             this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
+            int fina_locus = r.nextInt(1, 5);
+            if(fina_locus == 1){
+                final_room_rect = new Rectangle(1, 16, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 31, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
+            } else if(fina_locus == 2){
+                final_room_rect = new Rectangle(31, 16, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 31, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 3){
+                final_room_rect = new Rectangle(1, 31, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 16, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 4){
+                final_room_rect = new Rectangle(31, 31, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 16, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
+            }
         }else if(n == 2){
             for(int i = 0; i < start.length; i++){
                 for(int j = 0; j < start[i].length(); j++){
@@ -81,6 +181,102 @@ public class Board{
             Rectangle room = new Rectangle(1, 16, 10, 10);
             rooms.add(room);
             this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
+            this.x = (1920 - 45) / 2 - 300;
+            this.y = (1080 - 45) / 2 - 2600;
+            int fina_locus = r.nextInt(1, 5);
+            if(fina_locus == 1){
+                final_room_rect = new Rectangle(1, 1, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 31, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
+            } else if(fina_locus == 2){
+                final_room_rect = new Rectangle(31, 1, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 31, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 3){
+                final_room_rect = new Rectangle(1, 31, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 1, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 4){
+                final_room_rect = new Rectangle(31, 31, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 1, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
+            }
         }else if(n == 3){
             for(int i = 0; i < start.length; i++){
                 for(int j = 0; j < start[i].length(); j++){
@@ -92,6 +288,102 @@ public class Board{
             Rectangle room = new Rectangle(1, 31, 10, 10);
             rooms.add(room);
             this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
+            this.x = (1920 - 45) / 2 - 300;
+            this.y = (1080 - 45) / 2 - 4800;
+            int fina_locus = r.nextInt(1, 5);
+            if(fina_locus == 1){
+                final_room_rect = new Rectangle(1, 16, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 1, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
+            } else if(fina_locus == 2){
+                final_room_rect = new Rectangle(31, 16, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 1, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 3){
+                final_room_rect = new Rectangle(1, 1, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 16, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 4){
+                final_room_rect = new Rectangle(31, 1, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 16, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
+            }
         }else if(n == 4){
             for(int i = 0; i < start.length; i++){
                 for(int j = 0; j < start[i].length(); j++){
@@ -103,6 +395,103 @@ public class Board{
             Rectangle room = new Rectangle(31, 1, 10, 10);
             rooms.add(room);
             this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
+            this.x = (1920 - 45) / 2 - 4800;
+            this.y = (1080 - 45) / 2 - 300;
+            int fina_locus = r.nextInt(1, 5);
+//            fina_locus = 4;
+            if(fina_locus == 1){
+                final_room_rect = new Rectangle(1, 16, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 31, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
+            } else if(fina_locus == 2){
+                final_room_rect = new Rectangle(31, 16, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 31, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 3){
+                final_room_rect = new Rectangle(1, 31, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 16, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 4){
+                final_room_rect = new Rectangle(31, 31, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 16, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
+            }
         }else if(n == 5){
             for(int i = 0; i < start.length; i++){
                 for(int j = 0; j < start[i].length(); j++){
@@ -114,6 +503,102 @@ public class Board{
             Rectangle room = new Rectangle(31, 16, 10, 10);
             rooms.add(room);
             this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
+            this.x = (1920 - 45) / 2 - 4800;
+            this.y = (1080 - 45) / 2 - 2700;
+            int fina_locus = r.nextInt(1, 5);
+            if(fina_locus == 1){
+                final_room_rect = new Rectangle(1, 1, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 31, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
+            } else if(fina_locus == 2){
+                final_room_rect = new Rectangle(31, 1, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 31, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 3){
+                final_room_rect = new Rectangle(1, 31, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 1, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 4){
+                final_room_rect = new Rectangle(31, 31, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 1, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
+            }
         }else if(n == 6){
             for(int i = 0; i < start.length; i++){
                 for(int j = 0; j < start[i].length(); j++){
@@ -125,6 +610,102 @@ public class Board{
             Rectangle room = new Rectangle(31, 31, 10, 10);
             rooms.add(room);
             this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
+            this.x = (1920 - 45) / 2 - 4800;
+            this.y = (1080 - 45) / 2 - 4800;
+            int fina_locus = r.nextInt(1, 5);
+            if(fina_locus == 1){
+                final_room_rect = new Rectangle(1, 16, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 1, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
+            } else if(fina_locus == 2){
+                final_room_rect = new Rectangle(31, 16, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 1, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 3){
+                final_room_rect = new Rectangle(1, 1, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(31, 16, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
+            }else if(fina_locus == 4){
+                final_room_rect = new Rectangle(31, 1, 10, 10);
+                for(int i = 0; i < final_room.length; i++){
+                    for(int j = 0; j < final_room[i].length(); j++){
+                        if(final_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                        }else if(final_room[i].charAt(j) == 'f'){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }
+                    }
+                }
+                rooms.add(final_room_rect);
+                this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
+                chest_room_rect = new Rectangle(1, 16, 10, 10);
+                for(int i = 0; i < chest_room.length; i++){
+                    for(int j = 0; j < chest_room[i].length(); j++){
+                        if(chest_room[i].charAt(j) == '.'){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                        }
+                    }
+                }
+                rooms.add(chest_room_rect);
+                this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
+            }
         }
         String[] room1 = new Rooms().enemy_room();
         for(int i = 0; i < room1.length; i++){
@@ -136,7 +717,6 @@ public class Board{
         }
         Rectangle enemy_room_1 = new Rectangle(16, 1, 10, 10);
         rooms.add(enemy_room_1);
-        enemies.add(new Enemy(21 * cellSize, 5 * cellSize, 100, 10, enemy_room_1, 30));
         this.paintRectangle(new Rectangle(20, 11, 2, 5), new Color(86, 15, 15));
         String[] room2 = new Rooms().enemy_room();
         for(int i = 0; i < room2.length; i++){
@@ -146,7 +726,8 @@ public class Board{
                 }
             }
         }
-        rooms.add(new Rectangle(16, 16, 10, 10));
+        Rectangle enemy_room_2 = new Rectangle(16, 16, 10, 10);
+        rooms.add(enemy_room_2);
         this.paintRectangle(new Rectangle(20, 26, 2, 5), new Color(86, 15, 15));
         String[] room3 = new Rooms().enemy_room();
         for(int i = 0; i < room3.length; i++){
@@ -156,7 +737,8 @@ public class Board{
                 }
             }
         }
-        rooms.add(new Rectangle(16, 31, 10, 10));
+        Rectangle enemy_room_3 = new Rectangle(16, 31, 10, 10);
+        rooms.add(enemy_room_3);
     }
 
     void update_enemies(Player player){
@@ -332,6 +914,8 @@ public class Board{
     }
 
     public void update(Player player){
+        System.out.println(x);
+        System.out.println(y);
         this.x += x_direction * dx;
         this.y += y_direction * dy;
         make_graph(get_room_screen(player.x, player.y));

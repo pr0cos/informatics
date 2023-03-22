@@ -22,13 +22,9 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
     public MyPanel(Board board, Player player) {
         this.board = board;
         this.player = player;
-        boolean w_flag = false;
-        boolean s_flag = false;
-        boolean a_flag = false;
-        boolean d_flag = false;
-        boolean mouse_left_flag = false;
         t = System.currentTimeMillis();
         setSize(1920, 1080);
+        setUndecorated(true);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         addMouseListener(this);

@@ -14,13 +14,13 @@ public class Player {
 
     public Player(int hp, int damage, int x, int y) {
         this.hp = hp;
-        this.size = 30;
+        this.size = 45;
         this.damage = damage;
         this.x = x;
         this.y = y;
         hurts = false;
 //        gun = new DefaultGun();
-        gun = new SniperRifle();
+        gun = new MachineGun();
     }
     public void paint(Graphics g){
         if(System.currentTimeMillis() - t > 300){

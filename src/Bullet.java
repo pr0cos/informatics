@@ -24,7 +24,7 @@ public class Bullet {
 
     public void paint(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
-        g2.setStroke(new BasicStroke(10));
+        g2.setStroke(new BasicStroke(15));
         g2.setColor(color);
         g2.drawLine((int) x,(int) y,(int) (x + dx),(int) (y + dy));
     }
