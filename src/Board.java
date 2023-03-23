@@ -1,8 +1,6 @@
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.lang.annotation.Retention;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -22,6 +20,7 @@ public class Board{
     ArrayList<Enemy> enemies;
     ArrayList<Rectangle> rooms;
     ArrayList<PlayerBullet> playerBullets;
+    ArrayList<EnemyBullet> enemyBullets;
     ArrayList<ArrayList<Integer>> graph;
 
     public Board(int x, int y, int cellSize) {
@@ -37,6 +36,7 @@ public class Board{
         enemies = new ArrayList<>();
         rooms = new ArrayList<>();
         playerBullets = new ArrayList<>();
+        enemyBullets = new ArrayList<>();
         board = new ArrayList<>();
         for(int i = 0; i < this.height; i++){
             board.add(new ArrayList<Cell>());
@@ -718,6 +718,7 @@ public class Board{
         Rectangle enemy_room_1 = new Rectangle(16, 1, 10, 10);
         rooms.add(enemy_room_1);
         this.paintRectangle(new Rectangle(20, 11, 2, 5), new Color(86, 15, 15));
+        enemies.add(new Rifler(-this.x - 1800, -this.y - 200, enemy_room_1));
         String[] room2 = new Rooms().enemy_room();
         for(int i = 0; i < room2.length; i++){
             for(int j = 0; j < room2[i].length(); j++){
@@ -739,6 +740,10 @@ public class Board{
         }
         Rectangle enemy_room_3 = new Rectangle(16, 31, 10, 10);
         rooms.add(enemy_room_3);
+    }
+
+    void generate_enemies(Rectangle room){
+
     }
 
     void update_enemies(Player player){
@@ -791,11 +796,20 @@ public class Board{
                             break;
                         }
                     }
-                    System.out.println(x2_ans - (enemy.x + enemy.size / 2.0));
-                    System.out.println(y2_ans - (enemy.y + enemy.size / 2.0));
-                    Vector2D v = new Vector2D(x2_ans - (enemy.x + enemy.size / 2.0), y2_ans - (enemy.y + enemy.size / 2.0));
-                    v.normalize();
-                    enemy.update(v.x, v.y);
+                    if(enemy instanceof Rifler) {
+                        if (x2_ans == (room.x + (path.get(-1) % 10) + 0.5) * cellSize) {
+                            enemyBullets.add(((Rifler) enemy).shoot(player.x + player.size / 2, player.y + player.size / 2));
+                        }
+                        else{
+                            Vector2D v = new Vector2D(x2_ans - (enemy.x + enemy.size / 2.0), y2_ans - (enemy.y + enemy.size / 2.0));
+                            v.normalize();
+                            enemy.update(v.x, v.y);
+                        }
+                    }else {
+                        Vector2D v = new Vector2D(x2_ans - (enemy.x + enemy.size / 2.0), y2_ans - (enemy.y + enemy.size / 2.0));
+                        v.normalize();
+                        enemy.update(v.x, v.y);
+                    }
                 }
             }
         }
@@ -920,6 +934,7 @@ public class Board{
         this.y += y_direction * dy;
         make_graph(get_room_screen(player.x, player.y));
         ArrayList<PlayerBullet> delete_player_bullets = new ArrayList<>();
+        ArrayList<EnemyBullet> delete_enemy_bullets = new ArrayList<>();
         ArrayList<Enemy> delete_enemies = new ArrayList<>();
         for(PlayerBullet bullet : playerBullets){
             bullet.x += x_direction * dx;
@@ -936,6 +951,20 @@ public class Board{
                     delete_player_bullets.add(bullet);
                     enemy.hp -= bullet.damage;
                 }
+            }
+        }
+        for(EnemyBullet bullet : enemyBullets){
+            bullet.x += x_direction * dx;
+            bullet.y += y_direction * dy;
+            bullet.update();
+            if(!get_cell_screen((int)bullet.x, (int)bullet.y).status){
+                delete_enemy_bullets.add(bullet);
+            }
+            Rectangle2D bul = new Rectangle2D.Float((int) bullet.x, (int)bullet.y, 20, 20);
+            Rectangle2D r1 = new Rectangle2D.Float(player.x, player.y, player.size, player.size);
+            if(bul.intersects(r1)){
+                delete_enemy_bullets.add(bullet);
+                player.damage(bullet.damage);
             }
         }
         for(Enemy enemy : enemies){
