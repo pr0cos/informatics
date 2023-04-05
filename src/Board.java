@@ -718,7 +718,7 @@ public class Board{
         Rectangle enemy_room_1 = new Rectangle(16, 1, 10, 10);
         rooms.add(enemy_room_1);
         this.paintRectangle(new Rectangle(20, 11, 2, 5), new Color(86, 15, 15));
-        enemies.add(new Rifler(-this.x - 1800, -this.y - 200, enemy_room_1));
+        enemies.add(new Rifler(2550 + this.x, 450 + this.y, enemy_room_1));
         String[] room2 = new Rooms().enemy_room();
         for(int i = 0; i < room2.length; i++){
             for(int j = 0; j < room2[i].length(); j++){
@@ -761,10 +761,10 @@ public class Board{
         }
         Cell player_cell = get_cell_screen(player.x, player.y);
         ArrayList<ArrayList<Integer>> paths = shortestPath((player_cell.x - room.x) + (player_cell.y - room.y) * 10);
-        System.out.println((player_cell.x - room.x) + (player_cell.y - room.y) * 10);
+//        System.out.println((player_cell.x - room.x) + (player_cell.y - room.y) * 10);
         for(Enemy enemy : enemies){
             if(enemy.room == room) {
-                Cell enemy_cell = get_cell_screen((int) enemy.x, (int) enemy.y);
+                Cell enemy_cell = get_cell_screen((int) enemy.x + enemy.size / 2, (int) enemy.y + enemy.size / 2);
                 ArrayList<Integer> path = paths.get((enemy_cell.x - room.x) + (enemy_cell.y - room.y) * 10);
                 Collections.reverse(path);
                 System.out.println(path);
@@ -773,16 +773,16 @@ public class Board{
                     v.normalize();
                     enemy.update(v.x, v.y);
                 }else {
-                    double x2_ans = (room.x + (path.get(1) % 10) + 0.5) * cellSize + this.x;
-                    double y2_ans = (room.y + (path.get(1) / 10) + 0.5) * cellSize + this.y;
+                    double x2_ans = (room.x + (path.get(0) % 10) + 0.5) * cellSize + this.x;
+                    double y2_ans = (room.y + (path.get(0) / 10) + 0.5) * cellSize + this.y;
                     boolean flag = false;
                     for(int vertex : path){
                         double x1 = (room.x + (vertex % 10) + 0.5) * cellSize;
                         double y1 = (room.y + (vertex / 10) + 0.5) * cellSize;
-                        Line2D project1 = new Line2D.Double(x1, y1, enemy.x - this.x, enemy.y - this.y);
-                        Line2D project2 = new Line2D.Double(x1, y1, enemy.x + enemy.size - this.x, enemy.y + enemy.size - this.y);
-                        Line2D project3 = new Line2D.Double(x1, y1, enemy.x + enemy.size - this.x, enemy.y - this.y);
-                        Line2D project4 = new Line2D.Double(x1, y1, enemy.x - this.x, enemy.y + enemy.size - this.y);
+                        Line2D project1 = new Line2D.Double(x1 - enemy.size / 2, y1 - enemy.size / 2, enemy.x - this.x, enemy.y - this.y);
+                        Line2D project2 = new Line2D.Double(x1 + enemy.size / 2, y1 + enemy.size / 2, enemy.x + enemy.size - this.x, enemy.y + enemy.size - this.y);
+                        Line2D project3 = new Line2D.Double(x1 + enemy.size / 2, y1 - enemy.size / 2, enemy.x + enemy.size - this.x, enemy.y - this.y);
+                        Line2D project4 = new Line2D.Double(x1 - enemy.size / 2, y1 + enemy.size / 2, enemy.x - this.x, enemy.y + enemy.size - this.y);
                         for(Rectangle rect : rects){
                             if(project1.intersects(rect) || project2.intersects(rect) || project3.intersects(rect) || project4.intersects(rect)){
                                 flag = true;
@@ -797,7 +797,7 @@ public class Board{
                         }
                     }
                     if(enemy instanceof Rifler) {
-                        if (x2_ans == (room.x + (path.get(-1) % 10) + 0.5) * cellSize) {
+                        if (x2_ans == (room.x + (path.get(path.size() - 1) % 10) + 0.5) * cellSize + this.x) {
                             enemyBullets.add(((Rifler) enemy).shoot(player.x + player.size / 2, player.y + player.size / 2));
                         }
                         else{
@@ -906,6 +906,9 @@ public class Board{
         for(PlayerBullet bullet : playerBullets){
             bullet.paint(g);
         }
+        for(EnemyBullet bullet : enemyBullets){
+            bullet.paint(g);
+        }
         for(Enemy enemy : enemies){
             enemy.paint(g);
         }
@@ -928,8 +931,8 @@ public class Board{
     }
 
     public void update(Player player){
-        System.out.println(x);
-        System.out.println(y);
+//        System.out.println(x);
+//        System.out.println(y);
         this.x += x_direction * dx;
         this.y += y_direction * dy;
         make_graph(get_room_screen(player.x, player.y));
@@ -940,7 +943,7 @@ public class Board{
             bullet.x += x_direction * dx;
             bullet.y += y_direction * dy;
             bullet.update();
-            if(!get_cell_screen((int)bullet.x, (int)bullet.y).status){
+            if(!get_cell_screen((int)bullet.x, (int)bullet.y).status || (bullet.dist_max != -1 && bullet.dist >= bullet.dist_max)){
                 delete_player_bullets.add(bullet);
             }
             for(Enemy enemy : enemies){
@@ -968,7 +971,9 @@ public class Board{
             }
         }
         for(Enemy enemy : enemies){
-            enemy.update(x_direction * dx, y_direction * dy); // changing screen coordinates
+            System.out.println(enemy.x - this.x);
+            System.out.println(enemy.y - this.y);
+            enemy.update(x_direction * dx, y_direction * dy);
             Rectangle room = get_room_screen(player.x, player.y);
             Rectangle2D player_rectangle = new Rectangle2D.Float(player.x, player.y, player.size, player.size);
             Rectangle2D enemy_rectangle = new Rectangle2D.Float((float)enemy.x, (float)enemy.y, enemy.size, enemy.size);
@@ -983,6 +988,9 @@ public class Board{
         for(PlayerBullet bullet : delete_player_bullets){
             playerBullets.remove(bullet);
         }
+        for(EnemyBullet bullet : delete_enemy_bullets){
+            enemyBullets.remove(bullet);
+        }
         for(Enemy enemy : delete_enemies){
             enemies.remove(enemy);
         }
@@ -996,6 +1004,10 @@ public class Board{
             enemy.y += y_d * dy;
         }
         for(PlayerBullet bullet : playerBullets){
+            bullet.x += x_d * dx;
+            bullet.y += y_d * dy;
+        }
+        for(EnemyBullet bullet : enemyBullets){
             bullet.x += x_d * dx;
             bullet.y += y_d * dy;
         }

@@ -22,7 +22,6 @@ public class Enemy {
         x += dx;
         y += dy;
     }
-
     public void paint(Graphics g){
         g.setColor(Color.YELLOW);
         g.fillRect((int)x, (int)y, size, size);

@@ -84,7 +84,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             vel.normalize();
             t = System.currentTimeMillis();
             if(player.gun instanceof MachineGun) {
-                board.playerBullets.add(new PlayerBullet(20 * vel.x, 20 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                board.playerBullets.add(new PlayerBullet(20 * vel.x, 20 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, -1));
             }
         }
 
@@ -159,7 +159,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
                 double y1 = e.getY() - (player.y + player.size / 2.0);
                 Vector2D vel = new Vector2D(x1, y1);
                 vel.normalize();
-                board.playerBullets.add(new PlayerBullet(10 * vel.x, 10 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                board.playerBullets.add(new PlayerBullet(10 * vel.x, 10 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, -1));
             }
             if (System.currentTimeMillis() - t > player.gun.cooldown) {
                 double x1 = e.getX() - (player.x + player.size / 2.0);
@@ -168,21 +168,21 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
                 vel.normalize();
                 t = System.currentTimeMillis();
                 if(player.gun instanceof MachineGun) {
-                    board.playerBullets.add(new PlayerBullet(20 * vel.x, 20 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                    board.playerBullets.add(new PlayerBullet(20 * vel.x, 20 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, -1));
                 }
                 if(player.gun instanceof SniperRifle){
-                    board.playerBullets.add(new PlayerBullet(25 * vel.x, 25 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                    board.playerBullets.add(new PlayerBullet(25 * vel.x, 25 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, -1));
                 }
                 if (player.gun instanceof Shotgun) {
                     Vector2D vel1 = vel.rotated(Math.PI / 36);
                     Vector2D vel2 = vel.rotated(-Math.PI / 36);
                     Vector2D vel3 = vel.rotated(Math.PI / 18);
                     Vector2D vel4 = vel.rotated(-Math.PI / 18);
-                    board.playerBullets.add(new PlayerBullet(15 * vel.x, 15 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
-                    board.playerBullets.add(new PlayerBullet(15 * vel1.x, 15 * vel1.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
-                    board.playerBullets.add(new PlayerBullet(15 * vel2.x, 15 * vel2.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
-                    board.playerBullets.add(new PlayerBullet(15 * vel3.x, 15 * vel3.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
-                    board.playerBullets.add(new PlayerBullet(15 * vel4.x, 15 * vel4.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c));
+                    board.playerBullets.add(new PlayerBullet(15 * vel.x, 15 * vel.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, 600));
+                    board.playerBullets.add(new PlayerBullet(15 * vel1.x, 15 * vel1.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, 600));
+                    board.playerBullets.add(new PlayerBullet(15 * vel2.x, 15 * vel2.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, 600));
+                    board.playerBullets.add(new PlayerBullet(15 * vel3.x, 15 * vel3.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, 600));
+                    board.playerBullets.add(new PlayerBullet(15 * vel4.x, 15 * vel4.y, player.gun.damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, 600));
                 }
             }
         }
