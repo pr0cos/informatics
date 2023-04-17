@@ -1,8 +1,8 @@
 import java.awt.*;
 
 public class EnemyBullet extends Bullet{
-    public EnemyBullet(double dx, double dy, int damage, double x, double y) {
-        super(dx, dy, damage, x, y, Color.red, -1);
+    public EnemyBullet(double dx, double dy, int damage, double x, double y, int dist_max) {
+        super(dx, dy, damage, x, y, Color.red, dist_max);
     }
 
     @Override

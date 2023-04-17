@@ -1,4 +1,5 @@
 
+import javax.sound.midi.SysexMessage;
 import java.awt.*;
 
 public class Player {
@@ -8,8 +9,12 @@ public class Player {
     int y;
     int size;
     long t;
-    boolean hurts;
+    long t_shield;
+    boolean is_damaged;
+    boolean shield;
     int damage;
+    int extra_damage;
+    int extra_hp;
     Gun gun;
 
     public Player(int hp, int damage, int x, int y) {
@@ -18,27 +23,43 @@ public class Player {
         this.damage = damage;
         this.x = x;
         this.y = y;
-        hurts = false;
-//        gun = new DefaultGun();
-        gun = new Shotgun();
+        is_damaged = false;
+        gun = new MachineGun();
+        extra_hp = 0;
+        extra_damage = 0;
+        shield = false;
+//        gun = new Shotgun();
     }
     public void paint(Graphics g){
         if(System.currentTimeMillis() - t > 300){
-            hurts = false;
+            is_damaged = false;
         }
-        if(hurts){
+        if(System.currentTimeMillis() - t_shield > 1000){
+            shield = false;
+        }
+        if(shield){
+            g.setColor(Color.CYAN);
+        }else if(is_damaged){
             g.setColor(Color.RED);
-        }else{
+        }
+        else{
             g.setColor(Color.GREEN);
         }
         g.fillRect(x, y, size, size);
     }
 
     public void damage(int damage){
-        if(!hurts){
+        if(!is_damaged && !shield){
             hp -= damage;
             t = System.currentTimeMillis();
-            hurts = true;
+            is_damaged = true;
+        }
+    }
+
+    public void shield(){
+        if(System.currentTimeMillis() - t_shield > 2000){
+            shield = true;
+            t_shield = System.currentTimeMillis();
         }
     }
 }

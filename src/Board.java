@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -22,8 +23,10 @@ public class Board{
     ArrayList<PlayerBullet> playerBullets;
     ArrayList<EnemyBullet> enemyBullets;
     ArrayList<ArrayList<Integer>> graph;
+    Portal damage_portal;
+    Portal hp_portal;
 
-    public Board(int x, int y, int cellSize) {
+    public Board(int x, int y, int cellSize) throws IOException {
         this.x = x;
         this.y = y;
         this.width = 42;
@@ -31,12 +34,14 @@ public class Board{
         this.cellSize = cellSize;
         x_direction = 0;
         y_direction = 0;
-        dx = 5;
-        dy = 5;
+        dx = 10;
+        dy = 10;
         enemies = new ArrayList<>();
         rooms = new ArrayList<>();
         playerBullets = new ArrayList<>();
         enemyBullets = new ArrayList<>();
+        damage_portal = null;
+        hp_portal = null;
         board = new ArrayList<>();
         for(int i = 0; i < this.height; i++){
             board.add(new ArrayList<Cell>());
@@ -54,10 +59,10 @@ public class Board{
         last_room = null;
         generate();
     }
-    void generate(){
+    void generate() throws IOException {
         Random r = new Random();
         int n = r.nextInt(1, 7);
-//        n = 2;
+//        n = 1;
         String[] start = new Rooms().start_room();
         String[] final_room = new Rooms().final_room();
         String[] chest_room = new Rooms().chest_room();
@@ -68,6 +73,8 @@ public class Board{
                 for(int j = 0; j < start[i].length(); j++){
                     if(start[i].charAt(j) == '.'){
                         this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                    }else{
+                        board.get(1 + i).get(1 + j).is_wall = true;
                     }
                 }
             }
@@ -83,8 +90,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -106,8 +115,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -129,8 +140,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -152,8 +165,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -175,6 +190,8 @@ public class Board{
                 for(int j = 0; j < start[i].length(); j++){
                     if(start[i].charAt(j) == '.'){
                         this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                    }else{
+                        board.get(16 + i).get(1 + j).is_wall = true;
                     }
                 }
             }
@@ -190,8 +207,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -213,8 +232,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -236,8 +257,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -259,8 +282,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -282,6 +307,8 @@ public class Board{
                 for(int j = 0; j < start[i].length(); j++){
                     if(start[i].charAt(j) == '.'){
                         this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                    }else{
+                        board.get(31 + i).get(1 + j).is_wall = true;
                     }
                 }
             }
@@ -297,8 +324,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -320,8 +349,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -343,8 +374,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -366,8 +399,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -389,6 +424,8 @@ public class Board{
                 for(int j = 0; j < start[i].length(); j++){
                     if(start[i].charAt(j) == '.'){
                         this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                    }else{
+                        board.get(1 + i).get(31 + j).is_wall = true;
                     }
                 }
             }
@@ -405,8 +442,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -428,8 +467,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -451,8 +492,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -474,8 +517,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -497,6 +542,8 @@ public class Board{
                 for(int j = 0; j < start[i].length(); j++){
                     if(start[i].charAt(j) == '.'){
                         this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                    }else{
+                        board.get(16 + i).get(31 + j).is_wall = true;
                     }
                 }
             }
@@ -512,8 +559,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -535,8 +584,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -558,8 +609,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 31 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -581,8 +634,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (31 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -604,6 +659,8 @@ public class Board{
                 for(int j = 0; j < start[i].length(); j++){
                     if(start[i].charAt(j) == '.'){
                         this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                    }else{
+                        board.get(31 + i).get(31 + j).is_wall = true;
                     }
                 }
             }
@@ -619,8 +676,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 16 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -642,8 +701,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 16 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (16 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -665,8 +726,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(1 + j, 1 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (1 + j) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (1 + j + 1) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -688,8 +751,10 @@ public class Board{
                     for(int j = 0; j < final_room[i].length(); j++){
                         if(final_room[i].charAt(j) == '.'){
                             this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 152, 168));
-                        }else if(final_room[i].charAt(j) == 'f'){
-                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 1, 1), new Color(36, 62, 168));
+                        }else if(final_room[i].charAt(j) == 'f' && damage_portal == null && hp_portal == null){
+                            this.paintRectangle(new Rectangle(31 + j, 1 + i, 2, 2), new Color(36, 62, 168));
+                            damage_portal = new Portal(0, (31 + j) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
+                            hp_portal = new Portal(1, (31 + j + 1) * cellSize, (1 + i) * cellSize, cellSize, 2 * cellSize);
                         }
                     }
                 }
@@ -712,22 +777,27 @@ public class Board{
             for(int j = 0; j < room1[i].length(); j++){
                 if(room1[i].charAt(j) == '.'){
                     this.paintRectangle(new Rectangle(16 + j, 1 + i, 1, 1), new Color(36, 152, 168));
+                }else{
+                    board.get(1 + i).get(16 + j).is_wall = true;
                 }
             }
         }
         Rectangle enemy_room_1 = new Rectangle(16, 1, 10, 10);
+        generate_enemies(enemy_room_1);
         rooms.add(enemy_room_1);
         this.paintRectangle(new Rectangle(20, 11, 2, 5), new Color(86, 15, 15));
-        enemies.add(new Rifler(2550 + this.x, 450 + this.y, enemy_room_1));
         String[] room2 = new Rooms().enemy_room();
         for(int i = 0; i < room2.length; i++){
             for(int j = 0; j < room2[i].length(); j++){
                 if(room2[i].charAt(j) == '.'){
                     this.paintRectangle(new Rectangle(16 + j, 16 + i, 1, 1), new Color(36, 152, 168));
+                }else{
+                    board.get(16 + i).get(16 + j).is_wall = true;
                 }
             }
         }
         Rectangle enemy_room_2 = new Rectangle(16, 16, 10, 10);
+        generate_enemies(enemy_room_2);
         rooms.add(enemy_room_2);
         this.paintRectangle(new Rectangle(20, 26, 2, 5), new Color(86, 15, 15));
         String[] room3 = new Rooms().enemy_room();
@@ -735,15 +805,62 @@ public class Board{
             for(int j = 0; j < room3[i].length(); j++){
                 if(room3[i].charAt(j) == '.'){
                     this.paintRectangle(new Rectangle(16 + j, 31 + i, 1, 1), new Color(36, 152, 168));
+                }else{
+                    board.get(31 + i).get(16 + j).is_wall = true;
                 }
             }
         }
         Rectangle enemy_room_3 = new Rectangle(16, 31, 10, 10);
+        generate_enemies(enemy_room_3);
         rooms.add(enemy_room_3);
     }
 
-    void generate_enemies(Rectangle room){
+    void generate_enemies(Rectangle room) throws IOException {
+        Random r = new Random();
+        int n = r.nextInt(1, 2);
 
+        if(n == 1){
+            for(int i = 0; i < r.nextInt(5, 8); i++){
+                Zombie enemy = new Zombie(this.x, this.y, room);
+                while(!get_cell_screen((int)enemy.x + enemy.getSize() / 2, (int)enemy.y + enemy.getSize() / 2).status){
+                    enemy.x = r.nextInt(room.x * cellSize, (room.x + room.width) * cellSize) + this.x;
+                    enemy.y = r.nextInt(room.y * cellSize, (room.y + room.height) * cellSize) + this.y;
+                }
+                enemies.add(enemy);
+            }
+            for(int i = 0; i < r.nextInt(1, 3); i++){
+                Rifler enemy = new Rifler(this.x, this.y, room);
+                while(!get_cell_screen((int)enemy.x + enemy.getSize() / 2, (int)enemy.y + enemy.getSize() / 2).status){
+                    enemy.x = r.nextInt(room.x * cellSize, (room.x + room.width) * cellSize) + this.x;
+                    enemy.y = r.nextInt(room.y * cellSize, (room.y + room.height) * cellSize) + this.y;
+                }
+                enemies.add(enemy);
+            }
+            for(int i = 0; i < r.nextInt(3, 5); i++){
+                Hunter enemy = new Hunter(this.x, this.y, room);
+                while(!get_cell_screen((int)enemy.x + enemy.getSize() / 2, (int)enemy.y + enemy.getSize() / 2).status){
+                    enemy.x = r.nextInt(room.x * cellSize, (room.x + room.width) * cellSize) + this.x;
+                    enemy.y = r.nextInt(room.y * cellSize, (room.y + room.height) * cellSize) + this.y;
+                }
+                enemies.add(enemy);
+            }
+            for(int i = 0; i < r.nextInt(1, 2); i++){
+                MadMan enemy = new MadMan(this.x, this.y, room);
+                while(!get_cell_screen((int)enemy.x + enemy.getSize() / 2, (int)enemy.y + enemy.getSize() / 2).status){
+                    enemy.x = r.nextInt(room.x * cellSize, (room.x + room.width) * cellSize) + this.x;
+                    enemy.y = r.nextInt(room.y * cellSize, (room.y + room.height) * cellSize) + this.y;
+                }
+                enemies.add(enemy);
+            }
+            for(int i = 0; i < r.nextInt(1, 3); i++){
+                BigBro enemy = new BigBro(this.x, this.y, room);
+                while(!get_cell_screen((int)enemy.x + enemy.getSize() / 2, (int)enemy.y + enemy.getSize() / 2).status){
+                    enemy.x = r.nextInt(room.x * cellSize, (room.x + room.width) * cellSize) + this.x;
+                    enemy.y = r.nextInt(room.y * cellSize, (room.y + room.height) * cellSize) + this.y;
+                }
+                enemies.add(enemy);
+            }
+        }
     }
 
     void update_enemies(Player player){
@@ -759,30 +876,57 @@ public class Board{
                 }
             }
         }
-        Cell player_cell = get_cell_screen(player.x, player.y);
+        Cell player_cell = get_cell_screen(player.x + player.size / 2, player.y + player.size / 2);
         ArrayList<ArrayList<Integer>> paths = shortestPath((player_cell.x - room.x) + (player_cell.y - room.y) * 10);
-//        System.out.println((player_cell.x - room.x) + (player_cell.y - room.y) * 10);
         for(Enemy enemy : enemies){
             if(enemy.room == room) {
                 Cell enemy_cell = get_cell_screen((int) enemy.x + enemy.size / 2, (int) enemy.y + enemy.size / 2);
                 ArrayList<Integer> path = paths.get((enemy_cell.x - room.x) + (enemy_cell.y - room.y) * 10);
                 Collections.reverse(path);
-                System.out.println(path);
-                if(path.size() <= 1){
+                if(!enemy_cell.status){
+                    boolean left_up = get_cell_screen((int)enemy.x, (int)enemy.y).status;
+                    boolean left_down = get_cell_screen((int)enemy.x, (int)enemy.y + enemy.size).status;
+                    boolean right_up = get_cell_screen((int)enemy.x + enemy.size, (int)enemy.y).status;
+                    boolean right_down = get_cell_screen((int)enemy.x + enemy.size, (int)enemy.y + enemy.size).status;
+                    if(!(left_up && left_down)){
+                        enemy.update(5, 0);
+                    }
+                    if(!(right_up && right_down)){
+                        enemy.update(-5, 0);
+                    }
+                    if(!(left_up && right_up)){
+                        enemy.update(0, 5);
+                    }
+                    if(!(left_down && right_down)){
+                        enemy.update(0, -5);
+                    }
+                    if(!(left_down || right_down || left_up)){
+                        enemy.update(5, -5);
+                    }
+                    if(!(left_down || right_down || right_up)){
+                        enemy.update(-5, -5);
+                    }
+                    if(!(left_up || right_up || right_down)){
+                        enemy.update(-5, 5);
+                    }
+                    if(!(left_up || right_up || left_down)){
+                        enemy.update(5, 5);
+                    }
+                }else if(path.size() == 1){
                     Vector2D v = new Vector2D((player.x + player.size / 2.0) - (enemy.x + enemy.size / 2.0), (player.y + player.size / 2.0) - (enemy.y + enemy.size / 2.0));
                     v.normalize();
-                    enemy.update(v.x, v.y);
-                }else {
+                    enemy.update(2 * v.x, 2 * v.y);
+                } else if (path.size() != 0){
                     double x2_ans = (room.x + (path.get(0) % 10) + 0.5) * cellSize + this.x;
                     double y2_ans = (room.y + (path.get(0) / 10) + 0.5) * cellSize + this.y;
                     boolean flag = false;
                     for(int vertex : path){
                         double x1 = (room.x + (vertex % 10) + 0.5) * cellSize;
                         double y1 = (room.y + (vertex / 10) + 0.5) * cellSize;
-                        Line2D project1 = new Line2D.Double(x1 - enemy.size / 2, y1 - enemy.size / 2, enemy.x - this.x, enemy.y - this.y);
-                        Line2D project2 = new Line2D.Double(x1 + enemy.size / 2, y1 + enemy.size / 2, enemy.x + enemy.size - this.x, enemy.y + enemy.size - this.y);
-                        Line2D project3 = new Line2D.Double(x1 + enemy.size / 2, y1 - enemy.size / 2, enemy.x + enemy.size - this.x, enemy.y - this.y);
-                        Line2D project4 = new Line2D.Double(x1 - enemy.size / 2, y1 + enemy.size / 2, enemy.x - this.x, enemy.y + enemy.size - this.y);
+                        Line2D project1 = new Line2D.Double(x1 - enemy.size / 2 - 5, y1 - enemy.size / 2 - 5, enemy.x - this.x - 5, enemy.y - this.y - 5);
+                        Line2D project2 = new Line2D.Double(x1 + enemy.size / 2 + 5, y1 + enemy.size / 2 + 5, enemy.x + enemy.size - this.x + 5, enemy.y + enemy.size - this.y + 5);
+                        Line2D project3 = new Line2D.Double(x1 + enemy.size / 2 + 5, y1 - enemy.size / 2 - 5, enemy.x + enemy.size - this.x + 5, enemy.y - this.y - 5);
+                        Line2D project4 = new Line2D.Double(x1 - enemy.size / 2 - 5, y1 + enemy.size / 2 + 5, enemy.x - this.x - 5, enemy.y + enemy.size - this.y + 5);
                         for(Rectangle rect : rects){
                             if(project1.intersects(rect) || project2.intersects(rect) || project3.intersects(rect) || project4.intersects(rect)){
                                 flag = true;
@@ -797,18 +941,48 @@ public class Board{
                         }
                     }
                     if(enemy instanceof Rifler) {
-                        if (x2_ans == (room.x + (path.get(path.size() - 1) % 10) + 0.5) * cellSize + this.x) {
-                            enemyBullets.add(((Rifler) enemy).shoot(player.x + player.size / 2, player.y + player.size / 2));
+                        if (x2_ans == ((room.x + (path.get(path.size() - 1) % 10) + 0.5) * cellSize + this.x ) && y2_ans == (room.y + (path.get(path.size() - 1) / 10) + 0.5) * cellSize + this.y){
+                            EnemyBullet bullet = ((Rifler) enemy).shoot(player.x + player.size / 2, player.y + player.size / 2);
+                            if(bullet != null){
+                                enemyBullets.add(bullet);
+                            }
                         }
                         else{
                             Vector2D v = new Vector2D(x2_ans - (enemy.x + enemy.size / 2.0), y2_ans - (enemy.y + enemy.size / 2.0));
                             v.normalize();
-                            enemy.update(v.x, v.y);
+                            enemy.update(4 * v.x, 4 * v.y);
                         }
+                    } else if (enemy instanceof Hunter) {
+                        Vector2D v = new Vector2D(x2_ans - (enemy.x + enemy.size / 2.0), y2_ans - (enemy.y + enemy.size / 2.0));
+                        v.normalize();
+                        if (x2_ans == ((room.x + (path.get(path.size() - 1) % 10) + 0.5) * cellSize + this.x ) && y2_ans == (room.y + (path.get(path.size() - 1) / 10) + 0.5) * cellSize + this.y){
+                            ArrayList<EnemyBullet> bullets;
+                            bullets = ((Hunter) enemy).shoot(player.x + player.size / 2, player.y + player.size / 2);
+                            if (bullets != null) {
+                                enemyBullets.addAll(bullets);
+                            }
+                        }
+                        enemy.update(5 * v.x, 5 * v.y);
                     }else {
                         Vector2D v = new Vector2D(x2_ans - (enemy.x + enemy.size / 2.0), y2_ans - (enemy.y + enemy.size / 2.0));
                         v.normalize();
-                        enemy.update(v.x, v.y);
+                        if (enemy instanceof MadMan) {
+                            ArrayList<EnemyBullet> bullets;
+                            bullets = ((MadMan) enemy).shoot();
+                            if (bullets != null) {
+                                enemyBullets.addAll(bullets);
+                            }
+                            enemy.update(8 * v.x, 8 * v.y);
+                        } else if (enemy instanceof BigBro) {
+                            ArrayList<EnemyBullet> bullets;
+                            bullets = ((BigBro) enemy).shoot(player.x + player.size / 2, player.y + player.size / 2);
+                            if (bullets != null) {
+                                enemyBullets.addAll(bullets);
+                            }
+                            enemy.update(2 * v.x, 2 * v.y);
+                        } else {
+                            enemy.update(3 * v.x, 3 * v.y);
+                        }
                     }
                 }
             }
@@ -817,10 +991,10 @@ public class Board{
 
     public ArrayList<ArrayList<Integer>> shortestPath(int i) {
         double inf = 1000000000.0;
-        ArrayList<Double> d = new ArrayList<Double>();
+        ArrayList<Double> d = new ArrayList<>();
         ArrayList<ArrayList<Integer>> p = new ArrayList<>();
-        ArrayList<Integer> A = new ArrayList<Integer>();
-        ArrayList<Integer> B = new ArrayList<Integer>();
+        ArrayList<Integer> A = new ArrayList<>();
+        ArrayList<Integer> B = new ArrayList<>();
         for (int k = 0; k < graph.size(); k++) {
             d.add(0.0);
             p.add(new ArrayList<Integer>());
@@ -876,23 +1050,20 @@ public class Board{
         }
         for(int i = 0; i < room.height; i++){
             for(int j = 0; j < room.width; j++){
-                if(board.get(i + room.y).get(room.x + j).status){
                     if(j >= 1) {
-                        graph.get(10 * i + j).set(10 * i + j - 1, booleanObjectToInt(board.get(i + room.y).get(room.x + j - 1).status));
+                        graph.get(10 * i + j).set(10 * i + j - 1, boolean_to_int(board.get(i + room.y).get(room.x + j - 1).status));
                     }
                     if(j < room.width - 1) {
-                        graph.get(10 * i + j).set(10 * i + j + 1, booleanObjectToInt(board.get(i + room.y).get(room.x + j + 1).status));
+                        graph.get(10 * i + j).set(10 * i + j + 1, boolean_to_int(board.get(i + room.y).get(room.x + j + 1).status));
                     }
                     if(i >= 1) {
-                        graph.get(10 * i + j).set(10 * (i - 1) + j, booleanObjectToInt(board.get(i - 1 + room.y).get(room.x + j).status));
+                        graph.get(10 * i + j).set(10 * (i - 1) + j, boolean_to_int(board.get(i - 1 + room.y).get(room.x + j).status));
                     }
                     if(i < room.height - 1) {
-                        graph.get(10 * i + j).set(10 * (i + 1) + j, booleanObjectToInt(board.get(i + 1 + room.y).get(room.x + j).status));
+                        graph.get(10 * i + j).set(10 * (i + 1) + j, boolean_to_int(board.get(i + 1 + room.y).get(room.x + j).status));
                     }
                 }
             }
-        }
-        System.out.println(graph);
         last_room = room;
     }
 
@@ -912,6 +1083,8 @@ public class Board{
         for(Enemy enemy : enemies){
             enemy.paint(g);
         }
+        damage_portal.paint(g, x, y);
+        hp_portal.paint(g, x, y);
     }
     void paintRectangle(Rectangle rect, Color c){
         for(int i = rect.y; i < rect.y + rect.height; i++){
@@ -931,8 +1104,6 @@ public class Board{
     }
 
     public void update(Player player){
-//        System.out.println(x);
-//        System.out.println(y);
         this.x += x_direction * dx;
         this.y += y_direction * dy;
         make_graph(get_room_screen(player.x, player.y));
@@ -949,7 +1120,6 @@ public class Board{
             for(Enemy enemy : enemies){
                 Line2D l = new Line2D.Float((int) bullet.x, (int)bullet.y, (int) (bullet.x + 2 * bullet.dx), (int) (bullet.y + 2 * bullet.dy));
                 Rectangle2D r1 = new Rectangle2D.Float((int)enemy.x, (int)enemy.y, enemy.getSize(), enemy.getSize());
-                System.out.println(enemy.getSize());
                 if(l.intersects(r1)){
                     delete_player_bullets.add(bullet);
                     enemy.hp -= bullet.damage;
@@ -971,8 +1141,6 @@ public class Board{
             }
         }
         for(Enemy enemy : enemies){
-            System.out.println(enemy.x - this.x);
-            System.out.println(enemy.y - this.y);
             enemy.update(x_direction * dx, y_direction * dy);
             Rectangle room = get_room_screen(player.x, player.y);
             Rectangle2D player_rectangle = new Rectangle2D.Float(player.x, player.y, player.size, player.size);
@@ -1033,8 +1201,11 @@ public class Board{
         return null;
     }
 
-    public static int booleanObjectToInt(boolean foo) {
-        return Boolean.compare(foo, false);
+    int boolean_to_int(boolean foo){
+        if(foo){
+            return 1;
+        }
+        return 10000;
     }
 
     void invertUsingFor(Object[] array) {
