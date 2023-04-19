@@ -28,7 +28,7 @@ public class Player {
 
     public Player(int hp, int damage, int x, int y) throws IOException {
         this.hp = hp;
-        this.size = 45;
+        this.size = 80;
         this.damage = damage;
         this.x = x;
         this.y = y;
