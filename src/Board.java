@@ -25,6 +25,7 @@ public class Board{
     ArrayList<ArrayList<Integer>> graph;
     Portal damage_portal;
     Portal hp_portal;
+    GunToPick new_gun;
 
     public Board(int x, int y, int cellSize) throws IOException {
         this.x = x;
@@ -62,12 +63,21 @@ public class Board{
     void generate() throws IOException {
         Random r = new Random();
         int n = r.nextInt(1, 7);
-//        n = 1;
         String[] start = new Rooms().start_room();
         String[] final_room = new Rooms().final_room();
         String[] chest_room = new Rooms().chest_room();
         Rectangle final_room_rect;
         Rectangle chest_room_rect;
+        int gun_choose = r.nextInt(1, 4);
+        if(gun_choose == 1){
+            new_gun = new GunToPick(new Shotgun(), 0, 0);
+        }
+        if(gun_choose == 2){
+            new_gun = new GunToPick(new SniperRifle(), 0, 0);
+        }
+        if(gun_choose == 3){
+            new_gun = new GunToPick(new MachineGun(), 0, 0);
+        }
         if(n == 1){
             for(int i = 0; i < start.length; i++){
                 for(int j = 0; j < start[i].length(); j++){
@@ -100,11 +110,13 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 31, 10, 10);
+//                new_gun.x = (41 * cellSize + 31 * cellSize) / 2 + this.x;
+//                new_gun.y = (41 * cellSize + 31 * cellSize) / 2 + this.y;
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (41 * cellSize + 31 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
-                        if(chest_room[i].charAt(j) == '.'){
-                            this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
-                        }
+                        this.paintRectangle(new Rectangle(31 + j, 31 + i, 1, 1), new Color(36, 152, 168));
                     }
                 }
                 rooms.add(chest_room_rect);
@@ -125,6 +137,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 31, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (41 * cellSize + 31 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -150,6 +164,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 16, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (26 * cellSize + 16 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -175,6 +191,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 16, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (26 * cellSize + 16 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -217,6 +235,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 31, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (41 * cellSize + 31 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -242,6 +262,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 31, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (41 * cellSize + 31 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -267,6 +289,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 1, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (11 * cellSize + 1 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -292,6 +316,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 1, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (11 * cellSize + 1 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -334,6 +360,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 1, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (11 * cellSize + 1 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -359,6 +387,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 1, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (11 * cellSize + 1 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -384,6 +414,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 16, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (26 * cellSize + 16 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -409,6 +441,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 16, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (26 * cellSize + 16 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -435,7 +469,6 @@ public class Board{
             this.x = (1920 - 45) / 2 - 4800;
             this.y = (1080 - 45) / 2 - 300;
             int fina_locus = r.nextInt(1, 5);
-//            fina_locus = 4;
             if(fina_locus == 1){
                 final_room_rect = new Rectangle(1, 16, 10, 10);
                 for(int i = 0; i < final_room.length; i++){
@@ -452,6 +485,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 31, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (41 * cellSize + 31 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -477,6 +512,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 31, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (41 * cellSize + 31 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -502,6 +539,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 16, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (26 * cellSize + 16 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -527,6 +566,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 16, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (26 * cellSize + 16 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -569,6 +610,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 31, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (41 * cellSize + 31 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -594,6 +637,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 31, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (41 * cellSize + 31 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -619,6 +664,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 35, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 1, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (11 * cellSize + 1 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -644,6 +691,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 35, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 1, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (11 * cellSize + 1 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -686,6 +735,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 20, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 1, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (11 * cellSize + 1 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -711,6 +762,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 20, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 1, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (11 * cellSize + 1 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -736,6 +789,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(11, 5, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(31, 16, 10, 10);
+                new_gun.x = (41 * cellSize + 31 * cellSize) / 2;
+                new_gun.y = (26 * cellSize + 16 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -761,6 +816,8 @@ public class Board{
                 rooms.add(final_room_rect);
                 this.paintRectangle(new Rectangle(26, 5, 5, 2), new Color(86, 15, 15));
                 chest_room_rect = new Rectangle(1, 16, 10, 10);
+                new_gun.x = (11 * cellSize + 1 * cellSize) / 2;
+                new_gun.y = (26 * cellSize + 16 * cellSize) / 2;
                 for(int i = 0; i < chest_room.length; i++){
                     for(int j = 0; j < chest_room[i].length(); j++){
                         if(chest_room[i].charAt(j) == '.'){
@@ -1085,6 +1142,7 @@ public class Board{
         }
         damage_portal.paint(g, x, y);
         hp_portal.paint(g, x, y);
+        new_gun.paint(g, x, y);
     }
     void paintRectangle(Rectangle rect, Color c){
         for(int i = rect.y; i < rect.y + rect.height; i++){

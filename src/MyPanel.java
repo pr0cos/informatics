@@ -56,6 +56,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             board.paint(g);
             player.paint(g);
             g.setColor(new Color(100, 100, 100));
+            g.drawImage(player.gun.image, 50, 955, 200, 75, null);
             g.fillRect(25, 25, 25 * (10 + player.extra_hp), 50);
             g.setColor(Color.red);
             g.fillRect(25, 25, 25 * (player.hp + player.extra_hp), 50);
@@ -68,6 +69,11 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
                 g.setColor(Color.WHITE);
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
                 g.drawString("Press SPACE to get more health points", 750, 900);
+            }
+            if (board.new_gun.on_gun(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)) {
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+                g.drawString("Press E to swap weapon", 800, 900);
             }
             board.update(this.player);
             boolean left_up = board.get_cell_screen(player.x, player.y).status;
@@ -114,7 +120,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
                     board.playerBullets.add(new PlayerBullet(20 * vel.x, 20 * vel.y, player.gun.damage + player.extra_damage, player.x + player.size / 2.0, player.y + player.size / 2.0, player.gun.c, -1));
                 }
             }
-            if(player.hp <= 0){
+            if(player.hp + player.extra_hp <= 0){
                 try {
                     board = new Board(0, 0, 150);
                     player = new Player(10, 10, (getWidth() - player.size) / 2, (getHeight() - player.size) / 2);
@@ -125,6 +131,10 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
         }else{
             board.paint(g);
             player.paint(g);
+            g.setColor(new Color(100, 100, 100));
+            g.fillRect(25, 25, 25 * (10 + player.extra_hp), 50);
+            g.setColor(Color.red);
+            g.fillRect(25, 25, 25 * (player.hp + player.extra_hp), 50);
             g.setColor(Color.WHITE);
             g.setFont(new Font("SansSerif", Font.PLAIN, 50));
             g.drawString("PAUSE", 800, 500);
@@ -135,7 +145,11 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
-        if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_ESCAPE && board.damage_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)){
+        if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_E && board.new_gun.on_gun(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)){
+            System.out.println("asd");
+            player.gun = board.new_gun.pick(player.gun);
+        }
+        if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_SPACE && board.damage_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)){
             try {
                 player.extra_damage += 1;
                 board = new Board(0,0,150);
@@ -143,13 +157,18 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        }if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_ESCAPE && board.hp_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)){
+        }if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_SPACE && board.hp_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)){
             try {
                 player.extra_hp += 1;
                 board = new Board(0,0,150);
                 player.hp = 10;
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
+            }
+        }
+        if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_X){
+            if(player.extra_gun != null){
+                player.swap();
             }
         }
         if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F){

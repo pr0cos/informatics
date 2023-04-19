@@ -33,9 +33,9 @@ public class Enemy {
     public void update(double dx, double dy){
         x += dx;
         y += dy;
-        if(dx >= 0){
+        if(dx > 0){
             to_draw = image;
-        }else{
+        }else if(dx < 0){
             to_draw = image_rotated;
         }
     }
