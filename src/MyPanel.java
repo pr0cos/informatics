@@ -104,9 +104,14 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             if (!(left_up || right_up || left_down)) {
                 board.bug_update(-1, -1);
             }
-
+            Point e = MouseInfo.getPointerInfo().getLocation();
+            if(e.getX() - player.x - player.size / 2 > 0){
+                player.normalize();
+            }else{
+                player.rotate();
+            }
             if (System.currentTimeMillis() - t > player.gun.cooldown && mouse_left_flag && (player.gun instanceof MachineGun)) {
-                Point e = MouseInfo.getPointerInfo().getLocation();
+
                 double x1 = e.getX() - (player.x + player.size / 2.0);
                 double y1 = e.getY() - (player.y + player.size / 2.0);
                 Vector2D vel = new Vector2D(x1, y1);
@@ -124,8 +129,8 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
                 try {
                     board = new Board(0, 0, 150);
                     player = new Player(10, 10, (getWidth() - player.size) / 2, (getHeight() - player.size) / 2);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException x) {
+                    throw new RuntimeException(x);
                 }
             }
         }else{
@@ -147,7 +152,11 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
     public boolean dispatchKeyEvent(KeyEvent e) {
         if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_E && board.new_gun.on_gun(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)){
             System.out.println("asd");
-            player.gun = board.new_gun.pick(player.gun);
+            if(player.extra_gun == null){
+                player.extra_gun = board.new_gun.pick(null);
+            }else {
+                player.gun = board.new_gun.pick(player.gun);
+            }
         }
         if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_SPACE && board.damage_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)){
             try {

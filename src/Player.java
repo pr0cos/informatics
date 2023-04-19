@@ -1,6 +1,9 @@
 
+import javax.imageio.ImageIO;
 import javax.sound.midi.SysexMessage;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class Player {
@@ -19,6 +22,9 @@ public class Player {
     Gun gun;
     Gun extra_gun;
     long t_swap;
+    BufferedImage image;
+    BufferedImage image_rotated;
+    BufferedImage to_draw;
 
     public Player(int hp, int damage, int x, int y) throws IOException {
         this.hp = hp;
@@ -28,12 +34,14 @@ public class Player {
         this.y = y;
         is_damaged = false;
         gun = new DefaultGun();
-        extra_gun = new MachineGun();
+        extra_gun = null;
         extra_hp = 0;
         extra_damage = 0;
         shield = false;
         t_swap = System.currentTimeMillis();
-
+        image = ImageIO.read(new File("data\\player.png"));
+        image_rotated = ImageIO.read(new File("data\\player_rotated.png"));
+        to_draw = image;
     }
     public void paint(Graphics g){
         if(System.currentTimeMillis() - t > 300){
@@ -42,15 +50,24 @@ public class Player {
         if(System.currentTimeMillis() - t_shield > 1000){
             shield = false;
         }
+        g.drawImage(to_draw, x, y, size, size, null);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(4));
         if(shield){
             g.setColor(Color.CYAN);
+            g.drawOval(x, y, size, size);
         }else if(is_damaged){
             g.setColor(Color.RED);
+            g.drawOval(x, y, size, size);
         }
-        else{
-            g.setColor(Color.GREEN);
-        }
-        g.fillRect(x, y, size, size);
+    }
+
+    public void rotate(){
+        to_draw = image_rotated;
+    }
+
+    public void normalize(){
+        to_draw = image;
     }
 
     public void damage(int damage){

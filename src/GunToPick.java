@@ -25,14 +25,18 @@ public class GunToPick{
             Gun to_return = gun;
             gun = g;
             t_pick = System.currentTimeMillis();
-            image = gun.image;
+            if(g != null) {
+                image = gun.image;
+            }
             return to_return;
         }
         return g;
     }
 
     public void paint(Graphics g, int x_board, int y_board){
-        g.drawImage(image, x - width / 2 + x_board, y - height / 2 + y_board, null);
+        if(gun != null) {
+            g.drawImage(image, x - width / 2 + x_board, y - height / 2 + y_board, null);
+        }
     }
 
     public boolean on_gun(int x1, int y1){
