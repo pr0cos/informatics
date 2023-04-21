@@ -1201,13 +1201,15 @@ public class Board{
         for(Enemy enemy : enemies){
             enemy.update(x_direction * dx, y_direction * dy);
             Rectangle room = get_room_screen(player.x, player.y);
-            Rectangle2D player_rectangle = new Rectangle2D.Float(player.x, player.y, player.size, player.size);
-            Rectangle2D enemy_rectangle = new Rectangle2D.Float((float)enemy.x, (float)enemy.y, enemy.size, enemy.size);
-            if(player_rectangle.intersects(enemy_rectangle)){
-                player.damage(enemy.damage);
-            }
-            if(enemy.hp <= 0){
-                delete_enemies.add(enemy);
+            if(room == get_room_screen(player.x, player.y)) {
+                Rectangle2D player_rectangle = new Rectangle2D.Float(player.x, player.y, player.size, player.size);
+                Rectangle2D enemy_rectangle = new Rectangle2D.Float((float) enemy.x, (float) enemy.y, enemy.size, enemy.size);
+                if (player_rectangle.intersects(enemy_rectangle)) {
+                    player.damage(enemy.damage);
+                }
+                if (enemy.hp <= 0) {
+                    delete_enemies.add(enemy);
+                }
             }
         }
         update_enemies(player);
@@ -1264,13 +1266,5 @@ public class Board{
             return 1;
         }
         return 10000;
-    }
-
-    void invertUsingFor(Object[] array) {
-        for (int i = 0; i < array.length / 2; i++) {
-            Object temp = array[i];
-            array[i] = array[array.length - 1 - i];
-            array[array.length - 1 - i] = temp;
-        }
     }
 }

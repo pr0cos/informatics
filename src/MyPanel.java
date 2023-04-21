@@ -25,6 +25,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
     Player player;
     long t;
     long t_pause;
+    int iterations;
 
     public MyPanel(Board board, Player player) throws IOException {
         this.board = board;
@@ -40,6 +41,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
         addMouseListener(this);
         this.player.x = (getWidth() - player.size) / 2;
         this.player.y = (getHeight() - player.size) / 2;
+        iterations = 1;
     }
 
     @Override
@@ -60,20 +62,32 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             g.fillRect(25, 25, 25 * (10 + player.extra_hp), 50);
             g.setColor(Color.red);
             g.fillRect(25, 25, 25 * (player.hp + player.extra_hp), 50);
-            if (board.damage_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)) {
-                g.setColor(Color.WHITE);
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
-                g.drawString("Press SPACE to get more damage", 800, 900);
-            }
-            if (board.hp_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)) {
-                g.setColor(Color.WHITE);
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
-                g.drawString("Press SPACE to get more health points", 750, 900);
-            }
-            if (board.new_gun.on_gun(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)) {
-                g.setColor(Color.WHITE);
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
-                g.drawString("Press E to swap weapon", 800, 900);
+            if(!(board instanceof BossBoard)) {
+                if (board.damage_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)) {
+                    g.setColor(Color.WHITE);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+                    g.drawString("Press SPACE to get more damage", 800, 900);
+                }
+                if (board.hp_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)) {
+                    g.setColor(Color.WHITE);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+                    g.drawString("Press SPACE to get more health points", 750, 900);
+                }
+                if (board.new_gun.on_gun(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)) {
+                    g.setColor(Color.WHITE);
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+                    g.drawString("Press E to swap weapon", 800, 900);
+                }
+            }else{
+                if(((BossBoard) board).boss != null){
+                    g.setColor(new Color(100, 100, 100));
+                    g.fillRect(1850 - 5, 85 - 5, 50 + 10, 900 + 10);
+                    g.setColor(Color.red);
+                    g.fillRect(1850, 85, 50, 3 * ((BossBoard) board).boss.hp);
+                }else{
+                    g.setFont(new Font("SansSerif", Font.PLAIN, 50));
+                    g.drawString("YOU WIN!", 800, 500);
+                }
             }
             board.update(this.player);
             boolean left_up = board.get_cell_screen(player.x, player.y).status;
@@ -111,7 +125,6 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
                 player.rotate();
             }
             if (System.currentTimeMillis() - t > player.gun.cooldown && mouse_left_flag && (player.gun instanceof MachineGun)) {
-
                 double x1 = e.getX() - (player.x + player.size / 2.0);
                 double y1 = e.getY() - (player.y + player.size / 2.0);
                 Vector2D vel = new Vector2D(x1, y1);
@@ -129,6 +142,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
                 try {
                     board = new Board(0, 0, 150);
                     player = new Player(10, 10, (getWidth() - player.size) / 2, (getHeight() - player.size) / 2);
+                    iterations = 1;
                 } catch (IOException x) {
                     throw new RuntimeException(x);
                 }
@@ -161,7 +175,12 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
         if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_SPACE && board.damage_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)){
             try {
                 player.extra_damage += 1;
-                board = new Board(0,0,150);
+                if(iterations >= 2){
+                    board = new BossBoard(0,0,150);
+                }else {
+                    iterations += 1;
+                    board = new Board(0, 0, 150);
+                }
                 player.hp = 10;
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -169,7 +188,12 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
         }if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_SPACE && board.hp_portal.in_portal(player.x + player.size / 2 - board.x, player.y + player.size / 2 - board.y)){
             try {
                 player.extra_hp += 1;
-                board = new Board(0,0,150);
+                if(iterations >= 2){
+                    board = new BossBoard(0,0,150);
+                }else {
+                    iterations += 1;
+                    board = new Board(0, 0, 150);
+                }
                 player.hp = 10;
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -241,7 +265,14 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        if(e.getX() == 0 && e.getY() == 0){
+            player.hp = 10;
+            try {
+                board = new BossBoard(0,0,150);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     @Override
