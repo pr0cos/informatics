@@ -20,8 +20,8 @@ public class Boss extends Enemy{
     boolean is_angry;
 
     public Boss(double x, double y, Rectangle room) throws IOException {
-        super(x, y, 300, 3, room, 600, "data\\boss.png", "data\\boss.png");
-        boss_angry = ImageIO.read(new File("data\\boss_angry.png"));
+        super(x, y, 300, 3, room, 600, "boss.png", "boss.png");
+        boss_angry = ImageIO.read(MyPanel.class.getResourceAsStream("boss_angry.png"));
         attack_1 = false;
         cd_1 = 1000;
         attack_2 = false;

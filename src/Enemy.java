@@ -25,8 +25,8 @@ public class Enemy {
         this.damage = damage;
         this.room = room;
         this.size = size;
-        this.image = ImageIO.read(new File(image));
-        this.image_rotated = ImageIO.read(new File(image_rotated));
+        this.image = ImageIO.read(MyPanel.class.getResourceAsStream(image));
+        this.image_rotated = ImageIO.read(MyPanel.class.getResourceAsStream(image_rotated));
         to_draw = this.image;
     }
 

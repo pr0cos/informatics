@@ -8,7 +8,7 @@ public class BigBro extends Enemy {
     long t;
 
     public BigBro(double x, double y, Rectangle room) throws IOException {
-        super(x, y, 35, 4, room, 100, "data\\bigbro.png", "data\\bigbro_rotated.png");
+        super(x, y, 35, 4, room, 100, "bigbro.png", "bigbro_rotated.png");
         t = System.currentTimeMillis();
     }
 

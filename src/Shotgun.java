@@ -6,6 +6,6 @@ import java.io.IOException;
 public class Shotgun extends Gun{
 
     public Shotgun() throws IOException {
-        super(3, new Color(78, 222, 11), 750, ImageIO.read(new File("data\\shotgun.png")));
+        super(3, new Color(78, 222, 11), 750, ImageIO.read(MyPanel.class.getResourceAsStream("shotgun.png")));
     }
 }

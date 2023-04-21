@@ -39,8 +39,8 @@ public class Player {
         extra_damage = 0;
         shield = false;
         t_swap = System.currentTimeMillis();
-        image = ImageIO.read(new File("data\\player.png"));
-        image_rotated = ImageIO.read(new File("data\\player_rotated.png"));
+        image = ImageIO.read(MyPanel.class.getResourceAsStream("player.png"));
+        image_rotated = ImageIO.read(MyPanel.class.getResourceAsStream("player_rotated.png"));
         to_draw = image;
     }
     public void paint(Graphics g){

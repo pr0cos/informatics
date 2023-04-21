@@ -19,8 +19,8 @@ public class Portal {
         this.y = y;
         this.width = width;
         this.height = height;
-        portal1 = ImageIO.read(new File("data\\damage_portal.png"));
-        portal2 = ImageIO.read(new File("data\\hp_portal.png"));
+        portal1 = ImageIO.read(MyPanel.class.getResourceAsStream("damage_portal.png"));
+        portal2 = ImageIO.read(MyPanel.class.getResourceAsStream("hp_portal.png"));
     }
 
     public boolean in_portal(int x1, int y1){

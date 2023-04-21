@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Hunter extends Enemy{
     long t;
     public Hunter(double x, double y, Rectangle room) throws IOException {
-        super(x, y, 10, 2, room, 80, "data\\hunter.png", "data\\hunter_rotated.png");
+        super(x, y, 10, 2, room, 80, "hunter.png", "hunter_rotated.png");
         t = System.currentTimeMillis();
     }
 

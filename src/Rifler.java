@@ -4,7 +4,7 @@ import java.io.IOException;
 public class Rifler extends Enemy{
     long t;
     public Rifler(double x, double y, Rectangle room) throws IOException {
-        super(x, y, 2, 3, room, 80, "data\\rifler.png", "data\\rifler_rotated.png");
+        super(x, y, 2, 3, room, 80, "rifler.png", "rifler_rotated.png");
         t = System.currentTimeMillis();
     }
 

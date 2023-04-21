@@ -26,11 +26,11 @@ public class Cell {
         this.is_wall = false;
         Random r = new Random();
         if(r.nextBoolean()){
-            floor = ImageIO.read(new File("data\\floor1.png"));
+            floor = ImageIO.read(MyPanel.class.getResourceAsStream("floor1.png"));
         }else{
-            floor = ImageIO.read(new File("data\\floor2.png"));
+            floor = ImageIO.read(MyPanel.class.getResourceAsStream("floor2.png"));
         }
-        wall = ImageIO.read(new File("data\\wall.png"));
+        wall = ImageIO.read(MyPanel.class.getResourceAsStream("wall.png"));
     }
 
     public boolean isStatus() {

@@ -6,7 +6,7 @@ import java.util.Random;
 public class MadMan extends Enemy{
     long t;
     public MadMan(double x, double y, Rectangle room) throws IOException {
-        super(x, y, 10, 2, room, 100, "data\\madman.png", "data\\madman_rotated.png");
+        super(x, y, 10, 2, room, 100, "madman.png", "madman_rotated.png");
         t = System.currentTimeMillis();
     }
 

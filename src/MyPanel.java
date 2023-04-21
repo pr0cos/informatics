@@ -31,7 +31,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
         this.board = board;
         this.player = player;
         this.pause = true;
-        background = ImageIO.read(new File("data\\background.png"));
+        background = ImageIO.read(MyPanel.class.getResourceAsStream("background.png"));
         t = System.currentTimeMillis();
         t_pause = System.currentTimeMillis();
         setSize(1920, 1080);
