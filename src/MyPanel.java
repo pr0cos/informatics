@@ -26,11 +26,13 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
     long t;
     long t_pause;
     int iterations;
+    BossBoard boss_board;
 
     public MyPanel(Board board, Player player) throws IOException {
         this.board = board;
         this.player = player;
         this.pause = true;
+        boss_board = new BossBoard(0, 0, 150);
         background = ImageIO.read(MyPanel.class.getResourceAsStream("background.png"));
         t = System.currentTimeMillis();
         t_pause = System.currentTimeMillis();
@@ -79,12 +81,12 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
                     g.drawString("Press E to swap weapon", 800, 900);
                 }
             }else{
-                if(((BossBoard) board).boss != null){
+                if(((BossBoard) board).boss != null && ((BossBoard) board).boss.room == board.get_room_screen(player.x, player.y)){
                     g.setColor(new Color(100, 100, 100));
                     g.fillRect(1850 - 5, 85 - 5, 50 + 10, 900 + 10);
                     g.setColor(Color.red);
                     g.fillRect(1850, 85, 50, 3 * ((BossBoard) board).boss.hp);
-                }else{
+                }else if(((BossBoard) board).boss == null){
                     g.setFont(new Font("SansSerif", Font.PLAIN, 50));
                     g.drawString("YOU WIN!", 800, 500);
                 }
@@ -140,6 +142,9 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             }
             if(player.hp + player.extra_hp <= 0){
                 try {
+                    if(board instanceof BossBoard){
+                        boss_board = new BossBoard(0, 0, 150);
+                    }
                     board = new Board(0, 0, 150);
                     player = new Player(10, 10, (getWidth() - player.size) / 2, (getHeight() - player.size) / 2);
                     iterations = 1;
@@ -176,7 +181,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             try {
                 player.extra_damage += 1;
                 if(iterations >= 2){
-                    board = new BossBoard(0,0,150);
+                    board = boss_board;
                 }else {
                     iterations += 1;
                     board = new Board(0, 0, 150);
@@ -189,7 +194,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
             try {
                 player.extra_hp += 1;
                 if(iterations >= 2){
-                    board = new BossBoard(0,0,150);
+                    board = boss_board;
                 }else {
                     iterations += 1;
                     board = new Board(0, 0, 150);
@@ -267,11 +272,7 @@ public class MyPanel extends JFrame implements KeyEventDispatcher, MouseListener
     public void mouseClicked(MouseEvent e) {
         if(e.getX() == 0 && e.getY() == 0){
             player.hp = 10;
-            try {
-                board = new BossBoard(0,0,150);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            board = boss_board;
         }
     }
 
